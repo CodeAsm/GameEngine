@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "bash",
+                "args": ["-c"]
+            }
+        }
+    },
+    "tasks": [
+        {
+            "label": "build program on Linux",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "-o",
+                "${workspaceFolder}/${fileBasenameNoExtension}",
+                "${file}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}

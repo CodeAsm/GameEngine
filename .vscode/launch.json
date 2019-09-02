@@ -1,0 +1,37 @@
+{
+    "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "(gdb) Launch",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+                "args": [""],
+                "stopAtEntry": true,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": true,
+                "windows": {
+                    "MIMode": "gdb",
+                    "miDebuggerPath": "/usr/bin/gdb",
+                    "setupCommands": [
+                        {
+                            "description": "Enable pretty-printing for gdb",
+                            "text": "-enable-pretty-printing",
+                            "ignoreFailures": true
+                        }
+                    ]
+                },
+                "pipeTransport": {
+                    "pipeCwd": "",
+                    "pipeProgram": "/usr/bin/bash",
+                    "pipeArgs": ["-c"],
+                    "debuggerPath": "/usr/bin/gdb"
+                },
+                "sourceFileMap": {
+                    "/mnt/c": "${env:systemdrive}/",
+                    "/usr": "/usr/"
+                }
+            }
+        ]
+    }
