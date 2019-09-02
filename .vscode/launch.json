@@ -8,6 +8,7 @@
                 "program": "${workspaceFolder}/${fileBasenameNoExtension}",
                 "args": [""],
                 "stopAtEntry": true,
+                "preLaunchTask": "build",
                 "cwd": "${workspaceFolder}",
                 "environment": [],
                 "externalConsole": true,

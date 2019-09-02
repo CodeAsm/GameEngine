@@ -10,7 +10,7 @@
     },
     "tasks": [
         {
-            "label": "build program on Linux",
+            "label": "build",
             "type": "shell",
             "linux": {
                 "command": "g++",
