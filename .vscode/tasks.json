@@ -16,9 +16,13 @@
                 "command": "g++",
                 "args": [
                     "-g",
-                    "-lglut",
+                    "-lGLEW",
+                    "-lglfw",
                     "-lGL",
-                    "-lGLU",
+                    "-lX11",
+                    "-lpthread",
+                    "-lXrandr",
+                    "-lXi",
                     "-o",
                     "${workspaceFolder}/${fileBasenameNoExtension}",
                     "${file}"
