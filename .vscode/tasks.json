@@ -1,6 +1,6 @@
 {
     "version": "2.0.0",
-    "windows": {
+    "linux": {
         "options": {
             "shell": {
                 "executable": "bash",
@@ -12,13 +12,15 @@
         {
             "label": "build program on Linux",
             "type": "shell",
-            "command": "g++",
-            "args": [
-                "-g",
-                "-o",
-                "${workspaceFolder}/${fileBasenameNoExtension}",
-                "${file}"
-            ],
+            "linux": {
+                "command": "g++",
+                "args": [
+                    "-g",
+                    "-o",
+                    "${workspaceFolder}/${fileBasenameNoExtension}",
+                    "${file}"
+                ],
+            },
             "group": {
                 "kind": "build",
                 "isDefault": true
