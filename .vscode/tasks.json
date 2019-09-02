@@ -16,6 +16,9 @@
                 "command": "g++",
                 "args": [
                     "-g",
+                    "-lglut",
+                    "-lGL",
+                    "-lGLU",
                     "-o",
                     "${workspaceFolder}/${fileBasenameNoExtension}",
                     "${file}"
