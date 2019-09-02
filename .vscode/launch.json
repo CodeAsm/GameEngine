@@ -2,6 +2,18 @@
     "version": "0.2.0",
         "configurations": [
             {
+                "name": "Launch",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/${fileBasenameNoExtension}",
+                "args": [""],
+                "preLaunchTask": "build",
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "stopAtEntry": false,
+                "externalConsole": false,
+            },
+            {
                 "name": "(gdb) Launch",
                 "type": "cppdbg",
                 "request": "launch",
