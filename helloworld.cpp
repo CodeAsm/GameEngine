@@ -6,11 +6,21 @@
 // GLFW
 #include <GLFW/glfw3.h>
 
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
+    //When user presses the Esc key, we set WindowShouldClose
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+        glfwSetWindowShouldClose(window, GL_TRUE);
+        printf("[Kbd] Esc detected\n");
+    }
+}
+
 int main(int argc, char **argv)
 {
 
     printf("[APP] Starting ...\n");
 
+    // We setup the rendering statemachine and engine here
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -33,14 +43,27 @@ int main(int argc, char **argv)
     }
     glViewport(0,0,800,600);    //The actual rendering image into the window (this can be smaller)
 
+    //register keypres detection
+    glfwSetKeyCallback(window,key_callback);
+
     printf("[Game] entering game-loop\n");
     /// The big game loop
     while (!glfwWindowShouldClose(window))
     {
+        //Check and call events
         glfwPollEvents();
+
+        //Rendering commands
+        //clear previous thing
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        
+        //Swap buffers
         glfwSwapBuffers(window);
+
     }
 
+    // Proper closing 
     printf("[OpenGL] Stopping ...\n");
     glfwTerminate();
     printf("[APP] Stopping ...\n");
