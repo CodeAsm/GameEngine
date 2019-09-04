@@ -5,7 +5,14 @@
 #include <GL/glew.h>
 // GLFW
 #include <GLFW/glfw3.h>
+//#define DBG_Render    // Noisy
 
+//Test triangle
+GLfloat vertices[] = {
+    -0.5f, -0.5f, 0.0f,
+     0.5f, -0.5f, 0.0f,
+     0.0f,  0.5f, 0.0f
+};
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
     //When user presses the Esc key, we set WindowShouldClose
@@ -55,9 +62,11 @@ int main(int argc, char **argv)
 
         //Rendering commands
         //clear previous thing
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(0.035f, 0.137f, 0.219f, 1.0f); //Dark blue
         glClear(GL_COLOR_BUFFER_BIT);
-        
+#ifdef DBG_Render
+        printf("[Renderer] Cleared buffer\n");
+#endif
         //Swap buffers
         glfwSwapBuffers(window);
 
