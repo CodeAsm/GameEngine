@@ -7,12 +7,8 @@
 #include <GLFW/glfw3.h>
 //#define DBG_Render    // Noisy
 
-//Test triangle
-GLfloat vertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.0f,  0.5f, 0.0f
-};
+// Window dimensions (TODO: make configurable)
+const GLuint WIDTH = 800, HEIGHT = 600;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
     //When user presses the Esc key, we set WindowShouldClose
@@ -20,6 +16,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
         printf("[Kbd] Esc detected\n");
     }
+    if (key == GLFW_KEY_W && action == GLFW_PRESS){
+        printf("[Kbd] W \n");
+    }
+    if (key == GLFW_KEY_A && action == GLFW_PRESS){
+        printf("[Kbd] A \n");
+    }
+    if (key == GLFW_KEY_S && action == GLFW_PRESS){
+        printf("[Kbd] S \n");
+    }
+    if (key == GLFW_KEY_D && action == GLFW_PRESS){
+        printf("[Kbd] D \n");
+    }
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS){
+        printf("[Kbd] UP \n");
+    }
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+        printf("[Kbd] LEFT \n");
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+        printf("[Kbd] RIGHT \n");
+    }
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+        printf("[Kbd] DOWN \n");
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+        printf("[Kbd] SPACE \n");
+    }
+    
 }
 
 int main(int argc, char **argv)
@@ -35,7 +59,7 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     printf("[OpenGL] Making window\n");
-    GLFWwindow*window = glfwCreateWindow(800, 600, "OpenGL demo", nullptr,nullptr);
+    GLFWwindow*window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL \"Game\"Engine PreAlpha", nullptr,nullptr);
     if (window == nullptr){
         printf("[OpenGL] Failed to create GLFW window\n");
         glfwTerminate();
@@ -48,10 +72,20 @@ int main(int argc, char **argv)
         printf("[GLEW] Init failed");
         return -1;
     }
-    glViewport(0,0,800,600);    //The actual rendering image into the window (this can be smaller)
+    glViewport(0,0,WIDTH,HEIGHT);    //The actual rendering image into the window (this can be smaller)
 
     //register keypres detection
     glfwSetKeyCallback(window,key_callback);
+
+
+    //Test triangle
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, 0.0f, // Left
+        0.5f,  -0.5f, 0.0f, // Right
+        0.0f,   0.5f, 0.0f  // Top
+    };
+
+    //Shaders be here
 
     printf("[Game] entering game-loop\n");
     /// The big game loop

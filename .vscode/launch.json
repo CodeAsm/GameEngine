@@ -11,7 +11,7 @@
                 "cwd": "${workspaceFolder}",
                 "environment": [],
                 "stopAtEntry": false,
-                "externalConsole": false,
+                "externalConsole": true,
             },
             {
                 "name": "(gdb) Launch",
@@ -31,7 +31,12 @@
                         {
                             "description": "Enable pretty-printing for gdb",
                             "text": "-enable-pretty-printing",
-                            "ignoreFailures": true
+                            "ignoreFailures": true,
+                        },
+                        {
+                            "description": "TTY on Terminal for extra debugging",
+                            "text": "-inferior-tty-set /dev/pts/0",
+                            "ignoreFailures":false,
                         }
                     ]
                 },
