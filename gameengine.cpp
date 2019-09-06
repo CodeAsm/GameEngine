@@ -16,33 +16,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
         printf("[Kbd] Esc detected\n");
     }
-    if (key == GLFW_KEY_W && action == GLFW_PRESS){
-        printf("[Kbd] W \n");
-    }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS){
-        printf("[Kbd] A \n");
-    }
-    if (key == GLFW_KEY_S && action == GLFW_PRESS){
-        printf("[Kbd] S \n");
-    }
-    if (key == GLFW_KEY_D && action == GLFW_PRESS){
-        printf("[Kbd] D \n");
-    }
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-        printf("[Kbd] UP \n");
-    }
-    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-        printf("[Kbd] LEFT \n");
-    }
-    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-        printf("[Kbd] RIGHT \n");
-    }
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-        printf("[Kbd] DOWN \n");
-    }
-    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        printf("[Kbd] SPACE \n");
-    }
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) printf("[Kbd] W \n");
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) printf("[Kbd] A \n");
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) printf("[Kbd] S \n");
+    if (key == GLFW_KEY_D && action == GLFW_PRESS) printf("[Kbd] D \n");
+    if (key == GLFW_KEY_Q && action == GLFW_PRESS) printf("[Kbd] Q \n");
+    if (key == GLFW_KEY_E && action == GLFW_PRESS) printf("[Kbd] E \n");
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS) printf("[Kbd] UP \n");
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) printf("[Kbd] LEFT \n");
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) printf("[Kbd] RIGHT \n");
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) printf("[Kbd] DOWN \n");
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) printf("[Kbd] SPACE \n");
+    if (key == GLFW_KEY_TAB && action == GLFW_PRESS) printf("[Kbd] TAB \n");
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) printf("[Kbd] ENTER \n");
+    
     
 }
 
