@@ -82,9 +82,9 @@ int main(int argc, char **argv)
 
     //Test triangle
     GLfloat vertices[] = {
-        -0.5f, -0.5f, 0.0f, // Left
-        0.5f,  -0.5f, 0.0f, // Right
-        0.0f,   0.5f, 0.0f  // Top
+        -0.6f, -0.6f, 0.0f, // Left
+        0.6f,  -0.6f, 0.0f, // Right
+        0.0f,   0.6f, 0.0f  // Top
     };
 
     //Shaders be here
