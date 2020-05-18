@@ -50,7 +50,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 int main(int argc, char **argv)
 {
-
+    printf("Version: %s\n", VERSION);
     printf("[APP] Starting ...\n");
 
     // We setup the rendering statemachine and engine here
