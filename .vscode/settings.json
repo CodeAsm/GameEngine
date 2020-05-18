@@ -58,6 +58,14 @@
         "cinttypes": "cpp",
         "typeinfo": "cpp",
         "valarray": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "strstream": "cpp",
+        "bitset": "cpp",
+        "compare": "cpp",
+        "complex": "cpp",
+        "concepts": "cpp",
+        "unordered_set": "cpp",
+        "ranges": "cpp",
+        "stop_token": "cpp"
     }
 }

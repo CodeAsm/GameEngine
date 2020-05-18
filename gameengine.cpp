@@ -1,12 +1,14 @@
 
 #include "iostream"
+#include <string>
+
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
 // GLFW
 #include <GLFW/glfw3.h>
 //#define DBG_Render    // Noisy
-
+using namespace std;
 // Shaders
 const GLchar* vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 position;\n"
@@ -24,6 +26,10 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
 
 // Window dimensions (TODO: make configurable)
 const GLuint WIDTH = 800, HEIGHT = 600;
+
+#ifndef VERSION
+#define VERSION "1.1"; //TODO: this isnt working if we forget to define version.
+#endif
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
     //When user presses the Esc key, we set WindowShouldClose
@@ -61,7 +67,8 @@ int main(int argc, char **argv)
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     printf("[OpenGL] Making window\n");
-    GLFWwindow*window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGL \"Game\"Engine PreAlpha", nullptr,nullptr);
+    std::string title = "OpenGL \"Game\" Engine: ";
+    GLFWwindow*window = glfwCreateWindow(WIDTH, HEIGHT,(title += VERSION).c_str(), nullptr,nullptr);
     if (window == nullptr){
         printf("[OpenGL] Failed to create GLFW window\n");
         glfwTerminate();
