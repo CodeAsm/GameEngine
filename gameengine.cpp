@@ -1,4 +1,10 @@
+/*===========================================
 
+    Main Gameengine source file
+    Copyright CodeAsm 2020 Nico Vijlbrief
+
+https://github.com/CodeAsm/GameEngine
+=============================================*/
 #include "iostream"
 #include <string>
 
@@ -8,7 +14,11 @@
 // GLFW
 #include <GLFW/glfw3.h>
 //#define DBG_Render    // Noisy
+#include <imgui.h>
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 using namespace std;
+
 // Shaders
 const GLchar* vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 position;\n"
@@ -61,6 +71,8 @@ int main(int argc, char **argv)
 
     // We setup the rendering statemachine and engine here
     glfwInit();
+
+    const char* glsl_version = "#version 330 core";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -155,11 +167,33 @@ int main(int argc, char **argv)
     //--------------------------------------------------------------------------
     // End of shader stuff
 
+    printf("[Game] setting up imgui\n");
+     // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsClassic();
+
+    // Setup Platform/Renderer bindings
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init(glsl_version);
 
     printf("[Game] entering game-loop\n");
     /// The big game loop
     while (!glfwWindowShouldClose(window))
     {
+       // feed inputs to dear imgui, start new frame
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame(); 
+
+    // render your GUI
+    ImGui::Begin("Demo window");
+    ImGui::Button("Hello!");
+    ImGui::End();
+
         //Check and call events
         glfwPollEvents();
 
@@ -177,12 +211,22 @@ int main(int argc, char **argv)
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
-        // Done drawing
+        
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    // Render dear imgui into screen
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         //Swap buffers
         glfwSwapBuffers(window);
 
     }
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 
     // Proper closing 
     printf("[OpenGL] Stopping ...\n");

@@ -5,7 +5,9 @@ LIBS += -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi
 LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp
 IMGUI=pkg/imgui/
 OBJDIR=obj/
-SOURCES = gameengine.cpp $(wildcard $(IMGUI)*.cpp) 
+SOURCES = gameengine.cpp 
+SOURCES+= $(wildcard $(IMGUI)*.cpp) 
+SOURCES+= $(wildcard $(IMGUI)examples/imgui_impl_opengl3.cpp) $(wildcard $(IMGUI)examples/imgui_impl_glfw.cpp)
 #SOURCES += pkg/imgui/imgui.cpp pkg/imgui/imgui_demo.cpp pkg/imgui/imgui_draw.cpp pkg/imgui/imgui_widgets.cpp
 OBJS = $(addprefix $(OBJDIR), $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
 EXE = gameengine
@@ -19,6 +21,9 @@ else
 endif
 
 $(OBJDIR)%.o:$(IMGUI)%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+$(OBJDIR)%.o:$(IMGUI)/examples/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(OBJDIR)%.o:%.cpp
