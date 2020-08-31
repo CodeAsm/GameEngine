@@ -11,6 +11,26 @@ GLEW
 - Gouraud Shading   interpolation technique for surface shading 
 - Flat Shading
 
+# Compiling
+If you havent cloned yet:
+```
+git clone --recurse-submodules https://github.com/CodeAsm/GameEngine
+```
+else try:
+Yadajada doodlely doodoo, only Linux, you need to:
+```
+git submodule init
+git submodule update
+```
+before any
+```
+make
+```
+for cleaning (and no submodule is needed for this):
+```
+make clean
+```
+
 # Ideas
 * Object loading
 * Camera movement
