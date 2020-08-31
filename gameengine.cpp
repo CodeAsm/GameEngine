@@ -28,7 +28,7 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 #ifndef VERSION
-#define VERSION "1.1"; //TODO: this isnt working if we forget to define version.
+#define VERSION "1.1"//; //TODO: this isnt working if we forget to define version.
 #endif
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode){
