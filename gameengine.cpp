@@ -184,6 +184,10 @@ int main(int argc, char **argv)
     /// The big game loop
     while (!glfwWindowShouldClose(window))
     {
+
+        //Check and call events
+        glfwPollEvents();
+        
        // feed inputs to dear imgui, start new frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
@@ -192,10 +196,9 @@ int main(int argc, char **argv)
     // render your GUI
     ImGui::Begin("Demo window");
     ImGui::Button("Hello!");
+    ImGui::Text("Hello World in 3D!");
     ImGui::End();
 
-        //Check and call events
-        glfwPollEvents();
 
         //Rendering commands
         //clear previous thing
