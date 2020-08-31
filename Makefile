@@ -1,14 +1,14 @@
 CXX=g++
-CXXFLAGS=-I. -Ipkg/imgui/ -Ipkg/imgui/examples/
+CXXFLAGS=-I. -Ilib/imgui/ -Ilib/imgui/examples/
 CXXFLAGS += -g -Wall -Wformat 
 LIBS += -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi 
 LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp
-IMGUI=pkg/imgui/
+IMGUI=lib/imgui/
 OBJDIR=obj/
 SOURCES = gameengine.cpp 
 SOURCES+= $(wildcard $(IMGUI)*.cpp) 
 SOURCES+= $(wildcard $(IMGUI)examples/imgui_impl_opengl3.cpp) $(wildcard $(IMGUI)examples/imgui_impl_glfw.cpp)
-#SOURCES += pkg/imgui/imgui.cpp pkg/imgui/imgui_demo.cpp pkg/imgui/imgui_draw.cpp pkg/imgui/imgui_widgets.cpp
+#SOURCES += lib/imgui/imgui.cpp lib/imgui/imgui_demo.cpp lib/imgui/imgui_draw.cpp lib/imgui/imgui_widgets.cpp
 OBJS = $(addprefix $(OBJDIR), $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
 EXE = gameengine
 
