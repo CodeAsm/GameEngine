@@ -34,7 +34,6 @@ make clean
 # Ideas
 * Object loading
 * Camera movement
-* Framerate, actual rendering speed
 * File altering
 * Threading
 * Object management
@@ -44,7 +43,20 @@ make clean
 ## General Dev
 <https://stackoverflow.com/questions/1950926/create-directories-using-make-file>
 
+## Helpfull 3d
+<http://www.opengl-tutorial.org/miscellaneous/an-fps-counter/>
+Used for my fakeFPS counter, more accurate.
+
+<https://stackoverflow.com/questions/10535950/forcing-nvidia-gpu-programmatically-in-optimus-laptops/14041061#14041061>
+Not implemented yet, but seems important
 ## 3d
 <https://qiita.com/ssaattwworg/items/32ee9a6fdb0476833c02>
 <https://github.com/gwerners/BasicGLFWImgui>
 <https://blog.conan.io/2019/06/26/An-introduction-to-the-Dear-ImGui-library.html>
+
+## Database
+<https://github.com/jminor/sql-gui>
+
+## Other helpfull
+<https://stackoverflow.com/questions/14386856/c-check-currently-available-free-ram/57659190#57659190>
+For memory info (and maybe more)
