@@ -215,9 +215,10 @@ int main(int argc, char **argv)
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
         
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    //glBindVertexArray(VAO);
+    //glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+    //glBindVertexArray(0);
+
     // Render dear imgui into screen
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
