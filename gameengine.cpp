@@ -184,6 +184,7 @@ int main(int argc, char **argv)
 	// For speed computation
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
+    float spf = 0;
 
     printf("[Game] entering game-loop\n");
     /// The big game loop
@@ -198,7 +199,8 @@ int main(int argc, char **argv)
 		nbFrames++;
 		if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1sec ago
 			// printf and reset
-			printf("%f ms/frame\n", 1000.0/double(nbFrames));
+            spf = 1000.0/double(nbFrames);
+			printf("%f ms/frame\n", spf);
 			nbFrames = 0;
 			lastTime += 1.0;
 		}
@@ -211,6 +213,7 @@ int main(int argc, char **argv)
     // render your GUI
     ImGui::Begin("Demo window");
     ImGui::Button("Hello!");
+    ImGui::Text("%f ms/frame\n", spf);
     ImGui::Text("Hello World in 3D!");
     ImGui::End();
 
