@@ -180,6 +180,11 @@ int main(int argc, char **argv)
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+
+	// For speed computation
+	double lastTime = glfwGetTime();
+	int nbFrames = 0;
+
     printf("[Game] entering game-loop\n");
     /// The big game loop
     while (!glfwWindowShouldClose(window))
@@ -187,7 +192,17 @@ int main(int argc, char **argv)
 
         //Check and call events
         glfwPollEvents();
-        
+      
+        // Measure speed
+		double currentTime = glfwGetTime();
+		nbFrames++;
+		if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1sec ago
+			// printf and reset
+			printf("%f ms/frame\n", 1000.0/double(nbFrames));
+			nbFrames = 0;
+			lastTime += 1.0;
+		}
+
        // feed inputs to dear imgui, start new frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
