@@ -60,3 +60,10 @@ Not implemented yet, but seems important
 ## Other helpfull
 <https://stackoverflow.com/questions/14386856/c-check-currently-available-free-ram/57659190#57659190>
 For memory info (and maybe more)
+<https://github.com/ocornut/imgui/wiki/Useful-Extensions#midiosc-interfacing>
+Many more great ideas
+<https://github.com/ocornut/imgui_club>
+Like their hexedit:
+<https://github.com/ocornut/imgui_club>
+And maybe borrow ideas from:
+<https://github.com/WerWolv/ImHex>
