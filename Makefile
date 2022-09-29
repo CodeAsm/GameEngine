@@ -1,12 +1,12 @@
 CXX=g++
 CXXFLAGS=-I. -Ilib/imgui/ -Ilib/imgui/examples/
-CXXFLAGS += -g -Wall -Wformat 
-LIBS += -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi 
+CXXFLAGS += -g -Wall -Wformat
+LIBS += -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi
 LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp
 IMGUI=lib/imgui/
 OBJDIR=obj/
-SOURCES = gameengine.cpp 
-SOURCES+= $(wildcard $(IMGUI)*.cpp) 
+SOURCES = gameengine.cpp
+SOURCES+= $(wildcard $(IMGUI)*.cpp)
 SOURCES+= $(wildcard $(IMGUI)examples/imgui_impl_opengl3.cpp) $(wildcard $(IMGUI)examples/imgui_impl_glfw.cpp)
 #SOURCES += lib/imgui/imgui.cpp lib/imgui/imgui_demo.cpp lib/imgui/imgui_draw.cpp lib/imgui/imgui_widgets.cpp
 OBJS = $(addprefix $(OBJDIR), $(addsuffix .o, $(basename $(notdir $(SOURCES)))))
@@ -31,11 +31,11 @@ $(OBJDIR)%.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< -DVERSION=\"$(shell git describe --dirty --always --tags)\"
 
 $(EXE): $(OBJS)
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS) -o $(EXE) 
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS) -o $(EXE)
 
 all:$(EXE)
 	@echo Build complete for Linux $(shell git describe --dirty --always --tags)
-	
+
 .PHONY: clean
 clean:
 	rm -rf $(EXE) $(OBJS) $(OBJDIR)

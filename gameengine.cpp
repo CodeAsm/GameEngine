@@ -32,7 +32,7 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
     "{\n"
     "color = vec4(0.75f, 0.94f, 0.08f, 0.8f);\n"
     "}\n\0";
- 
+
 
 // Window dimensions (TODO: make configurable)
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -60,8 +60,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) printf("[Kbd] SPACE \n");
     if (key == GLFW_KEY_TAB && action == GLFW_PRESS) printf("[Kbd] TAB \n");
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) printf("[Kbd] ENTER \n");
-    
-    
+
+
 }
 
 int main(int argc, char **argv)
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 
         //Check and call events
         glfwPollEvents();
-      
+
         // Measure speed
 		double currentTime = glfwGetTime();
 		nbFrames++;
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
        // feed inputs to dear imgui, start new frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame(); 
+    ImGui::NewFrame();
 
     // render your GUI
     ImGui::Begin("Demo window");
@@ -232,12 +232,12 @@ int main(int argc, char **argv)
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);
-        
+
 
     // Render dear imgui into screen
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        
+
         //Swap buffers
         glfwSwapBuffers(window);
 
@@ -247,7 +247,7 @@ int main(int argc, char **argv)
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    // Proper closing 
+    // Proper closing
     printf("[OpenGL] Stopping ...\n");
     glfwTerminate();
     printf("[APP] Stopping ...\n");
