@@ -1,10 +1,10 @@
-/*===========================================
+/*===============================================
 
     Main Gameengine source file
-    Copyright CodeAsm 2020 Nico Vijlbrief
+    Copyright CodeAsm 2020-2022 Nico Vijlbrief
 
 https://github.com/CodeAsm/GameEngine
-=============================================*/
+=================================================*/
 #include "iostream"
 #include <string>
 
@@ -13,6 +13,9 @@ https://github.com/CodeAsm/GameEngine
 #include <GL/glew.h>
 // GLFW
 #include <GLFW/glfw3.h>
+// SDL2
+#include "SDL.h"
+#include "SDL_mixer.h"
 //#define DBG_Render    // Noisy
 #include <imgui.h>
 #include "imgui_impl_glfw.h"

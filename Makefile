@@ -1,8 +1,8 @@
 CXX=g++
 CXXFLAGS=-I. -Ilib/imgui/ -Ilib/imgui/examples/
-CXXFLAGS += -g -Wall -Wformat
+CXXFLAGS += -g -Wall -Wformat -I/usr/include/SDL2 -D_REENTRANT
 LIBS += -lGLEW -lglfw -lGL -lX11 -lpthread -lXrandr -lXi
-LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp
+LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp -L/usr/lib -lSDL2
 IMGUI=lib/imgui/
 OBJDIR=obj/
 SOURCES = gameengine.cpp
