@@ -1,7 +1,7 @@
 /*===============================================
 
     Main Gameengine source file
-    Copyright CodeAsm 2020-2022 Nico Vijlbrief
+    Copyright CodeAsm 2020-2024 Nico Vijlbrief
 
 https://github.com/CodeAsm/GameEngine
 =================================================*/
@@ -188,6 +188,7 @@ int main(int argc, char **argv)
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
     float spf = 0;
+    bool show = 0;
 
     printf("[Game] entering game-loop\n");
     /// The big game loop
@@ -215,7 +216,14 @@ int main(int argc, char **argv)
 
     // render your GUI
     ImGui::Begin("Demo window");
-    ImGui::Button("Hello!");
+    if (ImGui::Button("Save"))
+{
+    show = !show;
+}
+
+    if (show){
+	ImGui::Text("Saved.");
+    }
     ImGui::Text("%f ms/frame\n", spf);
     ImGui::Text("Hello World in 3D!");
     ImGui::End();
