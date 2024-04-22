@@ -8,6 +8,7 @@ https://github.com/CodeAsm/GameEngine
 #include "iostream"
 #include <string>
 
+#include "lib/kine/segment.cpp"
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -71,6 +72,15 @@ int main(int argc, char **argv)
 {
     printf("Version: %s\n", VERSION);
     printf("[APP] Starting ...\n");
+
+
+    MyClass myObj;  // Create an object of MyClass
+
+    // Access attributes and set values
+    myObj.myNum = 15; 
+    myObj.myString = L"Some text";
+
+
 
     // We setup the rendering statemachine and engine here
     glfwInit();
@@ -260,7 +270,7 @@ int main(int argc, char **argv)
 		if ( currentTime - lastTime >= 1.0 ){ // If last prinf() was more than 1sec ago
 			// printf and reset
             spf = 1000.0/double(nbFrames);
-			printf("%f ms/frame\n", spf);
+			if(show)printf("%f ms/frame\n", spf);
 			nbFrames = 0;
 			lastTime += 1.0;
 		}
@@ -272,17 +282,32 @@ int main(int argc, char **argv)
 
     // render your GUI
     ImGui::Begin("Demo window");
-    if (ImGui::Button("Save"))
-{
-    show = !show;
-}
+    if (ImGui::Button("Debug"))
+    {
+        show = !show;
+    }
 
     if (show){
 	ImGui::Text("Saved.");
     }
+    
     ImGui::Text("%f ms/frame\n", spf);
     ImGui::Text("Version: %s", VERSION);
-    ImGui::Text("Hello World in 3D!");
+    ImGui::Text("------------\n");
+
+    ImGui::Text("MyObj name: %S", myObj.myString.c_str());
+    ImGui::Text("MyObj num: %d", myObj.myNum);
+    if (ImGui::Button("Decrease"))
+    {
+        myObj.myNum = myObj.myNum - 1;
+    }
+    ImGui::SameLine(75);
+    if (ImGui::Button("Increase"))
+    {
+       myObj.myNum = myObj.myNum + 1;
+    }
+
+
     ImGui::End();
 
 
