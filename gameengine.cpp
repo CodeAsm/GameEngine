@@ -39,7 +39,7 @@ const GLchar* fragmentShaderSource = "#version 330 core\n"
 
 
 // Window dimensions (TODO: make configurable)
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 1024, HEIGHT = 720;
 
 #ifndef VERSION
 #define VERSION "1.1"//; //TODO: this isnt working if we forget to define version.
@@ -74,11 +74,9 @@ int main(int argc, char **argv)
     printf("[APP] Starting ...\n");
 
 
-    MyClass myObj;  // Create an object of MyClass
+     Vector2D vec(1.0, 2.0, 3.0, 4.0);
 
-    // Access attributes and set values
-    myObj.myNum = 15; 
-    myObj.myString = L"Some text";
+    vec.Name = L"A";
 
 
 
@@ -112,70 +110,10 @@ int main(int argc, char **argv)
     glfwSetKeyCallback(window,key_callback);
 
 
-    //Test triangle
-    GLfloat vertices[] = {
-        -0.6f, -0.6f, 0.0f, // Left
-        0.6f,  -0.6f, 0.0f, // Right
-        0.0f,   0.6f, 0.0f  // Top
-    };
-
-    //Shaders be here
-    //--------------------------------------------------------------------------
-    // Build and compile our shader program
-    // Vertex shader
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // Check for compile time errors
-    GLint success;
-    GLchar infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        printf("[ERR] SHADER:VERTEX COMPILATION_FAILED\n");//+  infoLog + "\n");
-    }
-    // Fragment shader
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // Check for compile time errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
-    {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-
-        printf("[ERR] SHADER:FRAGMENT COMPILATION_FAILED\n");//+  infoLog + "\n");
-    }
-    // Link shaders
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // Check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        printf("[ERR] SHADER:PROGRAM COMPILATION_FAILED\n");//+  infoLog + "\n");
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    GLuint VBO, VAO;
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
 
-    glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+ //   glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 
     //--------------------------------------------------------------------------
     // End of shader stuff
@@ -287,24 +225,25 @@ int main(int argc, char **argv)
         show = !show;
     }
 
-    if (show){
-	ImGui::Text("Saved.");
+    if (show){  
+        ImGui::Text("%f ms/frame\n", spf);
+        ImGui::Text("Version: %s", VERSION);
+        ImGui::Text("------------\n");
     }
     
-    ImGui::Text("%f ms/frame\n", spf);
-    ImGui::Text("Version: %s", VERSION);
-    ImGui::Text("------------\n");
 
-    ImGui::Text("MyObj name: %S", myObj.myString.c_str());
-    ImGui::Text("MyObj num: %d", myObj.myNum);
+    ImGui::Text("MyObj name: %S", vec.Name.c_str());
+    //ImGui::Text("MyObj num: %d", myObj.myNum);
+    ImGui::Text("%S Ax=%.2f Ay=%.2f, Ax2=%.2f Ay2=%.2f ",vec.Name.c_str(),vec.getStartX(),vec.getStartY(),vec.getEndX(),vec.getEndY());
     if (ImGui::Button("Decrease"))
     {
-        myObj.myNum = myObj.myNum - 1;
+     //   myObj.myNum = myObj.myNum - 1;
+            
     }
     ImGui::SameLine(75);
     if (ImGui::Button("Increase"))
     {
-       myObj.myNum = myObj.myNum + 1;
+       //myObj.myNum = myObj.myNum + 1;
     }
 
 
@@ -312,19 +251,31 @@ int main(int argc, char **argv)
 
 
         //Rendering commands
-        //clear previous thing
-        glClearColor(0.035f, 0.137f, 0.219f, 1.0f); //Dark blue
+        //clear previous thing 
         glClear(GL_COLOR_BUFFER_BIT);
+
+        glClearColor(0.035f, 0.137f, 0.219f, 1.0f); //Dark blue
+    //    glClear(GL_COLOR_BUFFER_BIT);
 #ifdef DBG_Render
         printf("[Renderer] Cleared buffer\n");
 #endif
         //Drawing actual stuff
 
         // Draw our first triangle
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glBindVertexArray(0);
+       // glUseProgram(shaderProgram);
+       // glBindVertexArray(VAO);
+       // glDrawArrays(GL_TRIANGLES, 0, 3);
+       // glBindVertexArray(0);
+
+        // Draw a line
+        ImVec2 p1(50, 50);
+        ImVec2 p2(150, 150);
+        ImGui::GetBackgroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+
+        // Rendering
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
 
 
     // Render dear imgui into screen
