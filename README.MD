@@ -67,3 +67,6 @@ Like their hexedit:
 <https://github.com/ocornut/imgui_club>
 And maybe borrow ideas from:
 <https://github.com/WerWolv/ImHex>
+
+maybe terminal?
+<https://github.com/leiradel/ImGuiAl>
