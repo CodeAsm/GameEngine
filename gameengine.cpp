@@ -73,13 +73,6 @@ int main(int argc, char **argv)
     printf("Version: %s\n", VERSION);
     printf("[APP] Starting ...\n");
 
-
-     Vector2D vec(1.0, 2.0, 3.0, 4.0);
-
-    vec.Name = L"A";
-
-
-
     // We setup the rendering statemachine and engine here
     glfwInit();
 
@@ -194,6 +187,10 @@ int main(int argc, char **argv)
     float spf = 0;
     bool show = 0;
 
+
+    Vector2D vec1(0.0, .0, 0.0, 100.0);
+    vec1.Name = L"A";
+
     printf("[Game] entering game-loop\n");
     /// The big game loop
     while (!glfwWindowShouldClose(window))
@@ -232,18 +229,19 @@ int main(int argc, char **argv)
     }
     
 
-    ImGui::Text("MyObj name: %S", vec.Name.c_str());
+    ImGui::Text("Segment: %S", vec1.Name.c_str());
     //ImGui::Text("MyObj num: %d", myObj.myNum);
-    ImGui::Text("%S Ax=%.2f Ay=%.2f, Ax2=%.2f Ay2=%.2f ",vec.Name.c_str(),vec.getStartX(),vec.getStartY(),vec.getEndX(),vec.getEndY());
+    ImGui::Text("%S length=%.2f angle=%.2f",vec1.Name.c_str(),vec1.length(),vec1.getAngle());
     if (ImGui::Button("Decrease"))
     {
      //   myObj.myNum = myObj.myNum - 1;
-            
+            vec1.setAngle(vec1.getAngle() - 1);
     }
     ImGui::SameLine(75);
     if (ImGui::Button("Increase"))
     {
        //myObj.myNum = myObj.myNum + 1;
+            vec1.setAngle(vec1.getAngle() + 1);
     }
 
 
@@ -261,16 +259,10 @@ int main(int argc, char **argv)
 #endif
         //Drawing actual stuff
 
-        // Draw our first triangle
-       // glUseProgram(shaderProgram);
-       // glBindVertexArray(VAO);
-       // glDrawArrays(GL_TRIANGLES, 0, 3);
-       // glBindVertexArray(0);
-
+        //adjust for screen
+        //WIDTH = 1024, HEIGHT = 720;
         // Draw a line
-        ImVec2 p1(50, 50);
-        ImVec2 p2(150, 150);
-        ImGui::GetBackgroundDrawList()->AddLine(p1, p2, IM_COL32(255, 255, 255, 255), 2.0f);
+        ImGui::GetBackgroundDrawList()->AddLine(vec1.getp1(WIDTH,HEIGHT), vec1.getp2(WIDTH,HEIGHT), IM_COL32(255, 255, 255, 255), 2.0f);
 
         // Rendering
         int display_w, display_h;
