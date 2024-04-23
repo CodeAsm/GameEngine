@@ -43,6 +43,12 @@ make clean
 ## General Dev
 <https://stackoverflow.com/questions/1950926/create-directories-using-make-file>
 
+printf and such are usefull to print variables and such:
+<https://cplusplus.com/reference/cstdio/printf/>
+
+Doing math:
+<https://stackoverflow.com/questions/10447791/what-does-lm-option-do-in-g>
+
 ## Helpfull 3d
 <http://www.opengl-tutorial.org/miscellaneous/an-fps-counter/>
 Used for my fakeFPS counter, more accurate.
@@ -70,3 +76,21 @@ And maybe borrow ideas from:
 
 maybe terminal?
 <https://github.com/leiradel/ImGuiAl>
+
+## SDL2 drawibg
+To draw lines, an old way was:
+<https://stackoverflow.com/questions/14486291/how-to-draw-line-in-opengl>
+official:
+<https://wiki.libsdl.org/SDL2/SDL_RenderDrawLine>
+but for SDL3 its obsolete?
+(found <https://wiki.libsdl.org/SDL3/SDL_RenderLine>)
+
+How to linedraw? this post was the first example:
+<https://github.com/ocornut/imgui/issues/2441>
+<https://github.com/ocornut/imgui/issues/2391>
+
+Helped getting line drawing, behind the imgui menu
+<https://github.com/ocornut/imgui/issues/1415>
+
+GLFW draw with resizing, intresting concepts, not yet used:
+<https://stackoverflow.com/questions/45880238/how-to-draw-while-resizing-glfw-window>
