@@ -6,6 +6,7 @@ LIBS += -lrt -lm -ldl -lxcb -lXau -lXdmcp -L/usr/lib -lSDL2
 IMGUI=lib/imgui/
 OBJDIR=obj/
 SOURCES = gameengine.cpp
+SOURCES+= lib/kine/segment.cpp
 SOURCES+= $(wildcard $(IMGUI)*.cpp)
 SOURCES+= $(wildcard $(IMGUI)examples/imgui_impl_opengl3.cpp) $(wildcard $(IMGUI)examples/imgui_impl_glfw.cpp)
 #SOURCES += lib/imgui/imgui.cpp lib/imgui/imgui_demo.cpp lib/imgui/imgui_draw.cpp lib/imgui/imgui_widgets.cpp
@@ -23,6 +24,10 @@ endif
 $(OBJDIR)%.o:$(IMGUI)%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+$(OBJDIR)%.o: lib/kine/%.cpp
+	mkdir -p $(OBJDIR)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
 $(OBJDIR)%.o:$(IMGUI)/examples/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
@@ -31,7 +36,7 @@ $(OBJDIR)%.o:%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< -DVERSION=\"$(shell git describe --dirty --always --tags)\"
 
 $(EXE): $(OBJS)
-	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS) -o $(EXE)
+	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 all:$(EXE)
 	@echo Build complete for Linux $(shell git describe --dirty --always --tags)

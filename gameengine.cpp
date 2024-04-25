@@ -8,7 +8,7 @@ https://github.com/CodeAsm/GameEngine
 #include "iostream"
 #include <string>
 
-#include "lib/kine/segment.cpp"
+#include "lib/kine/segment.hpp"
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -188,9 +188,8 @@ int main(int argc, char **argv)
     bool show = 0;
 
 
-    Vector2D vec1(0.0, .0, 0.0, 100.0);
-    vec1.Name = L"A";
-
+    Segment2D vec1(0.0, .0, 0.0, 100.0, L"A");
+    
     printf("[Game] entering game-loop\n");
     /// The big game loop
     while (!glfwWindowShouldClose(window))
@@ -229,9 +228,9 @@ int main(int argc, char **argv)
     }
     
 
-    ImGui::Text("Segment: %S", vec1.Name.c_str());
+    ImGui::Text("Segment: %S", vec1.getName().c_str());
     //ImGui::Text("MyObj num: %d", myObj.myNum);
-    ImGui::Text("%S length=%.2f angle=%.2f",vec1.Name.c_str(),vec1.length(),vec1.getAngle());
+    ImGui::Text("%S length=%.2f angle=%.2f",vec1.getName().c_str(),vec1.length(),vec1.getAngle());
     if (ImGui::Button("Decrease"))
     {
      //   myObj.myNum = myObj.myNum - 1;
@@ -262,7 +261,7 @@ int main(int argc, char **argv)
         //adjust for screen
         //WIDTH = 1024, HEIGHT = 720;
         // Draw a line
-        ImGui::GetBackgroundDrawList()->AddLine(vec1.getp1(WIDTH,HEIGHT), vec1.getp2(WIDTH,HEIGHT), IM_COL32(255, 255, 255, 255), 2.0f);
+        ImGui::GetBackgroundDrawList()->AddLine(vec1.getStartPoint(WIDTH,HEIGHT), vec1.getEndPoint(WIDTH,HEIGHT), IM_COL32(255, 255, 255, 255), 2.0f);
 
         // Rendering
         int display_w, display_h;
