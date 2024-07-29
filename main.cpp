@@ -1,11 +1,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <tiny_obj_loader.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cstddef>
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <vector>
+#include <glm/glm.hpp>
 
 // Functie om shaderbroncode te lezen uit een bestand
 std::string readShaderSource(const std::string& filePath) {
@@ -21,6 +26,7 @@ std::string readShaderSource(const std::string& filePath) {
 
     return shaderStream.str();
 }
+
 unsigned int compileShader(unsigned int type, const std::string& source) {
     unsigned int shader = glCreateShader(type);
     const char* src = source.c_str();
@@ -60,6 +66,7 @@ unsigned int createShaderProgram(const std::string& vertexShaderSource, const st
 
     return shaderProgram;
 }
+
 // Schermgrootte
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -76,7 +83,7 @@ float rotationX = 0.0f, rotationY = 0.0f;
 
 int main()
 {
-    // Initialiseren van GLFW
+  // Initialiseren van GLFW
     if (!glfwInit())
     {
         std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -109,6 +116,13 @@ int main()
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+    // Shaders laden
+    std::string vertexShaderSource = readShaderSource("vertex_shader.glsl");
+    std::string fragmentShaderSource = readShaderSource("fragment_shader.glsl");
+
+    // Shader programma creëren
+    unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+
     // Lader voor OBJ-bestanden
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
@@ -122,21 +136,20 @@ int main()
         return -1;
     }
 
+    // Vertex data verzamelen
+    std::vector<float> vertices;
+    for (const auto& shape : shapes) {
+        for (const auto& index : shape.mesh.indices) {
+            float vx = attrib.vertices[3 * index.vertex_index + 0];
+            float vy = attrib.vertices[3 * index.vertex_index + 1];
+            float vz = attrib.vertices[3 * index.vertex_index + 2];
+            vertices.push_back(vx);
+            vertices.push_back(vy);
+            vertices.push_back(vz);
+        }
+    }
 
-    // Shaders laden
-    std::string vertexShaderSource = readShaderSource("vertex_shader.glsl");
-    std::string fragmentShaderSource = readShaderSource("fragment_shader.glsl");
-
-    // Shader programma creëren
-    unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
-
-    // Vertex data en buffers
-    float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
-    };
-
+    // Vertex data en buffers instellen
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -144,7 +157,7 @@ int main()
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -152,19 +165,45 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // Hier komt de rest van je render logica
+    // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
+
     // Render loop
     while (!glfwWindowShouldClose(window)) {
-
-        // Invoer verwerken
+      // Invoer verwerken
         processInput(window);
 
         // Render logica hier
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // Use shader program
         glUseProgram(shaderProgram);
+
+        // Model matrix met rotatie
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
+
+        // View matrix
+        glm::mat4 view = glm::mat4(1.0f);
+        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+        // Projection matrix
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+        // Get their uniform location
+        unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+        unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+        unsigned int projLoc = glGetUniformLocation(shaderProgram, "projection");
+
+        // Pass them to the shaders
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+        // Draw the object
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
 
         // Buffers wisselen
         glfwSwapBuffers(window);
@@ -187,28 +226,50 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void processInput(GLFWwindow *window)
 {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        std::cout << "Escape key pressed." << std::endl;
         glfwSetWindowShouldClose(window, true);
+    }
 
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
         rotationX += 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        std::cout << "Up key pressed. rotationX: " << rotationX << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
         rotationX -= 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        std::cout << "Down key pressed. rotationX: " << rotationX << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
         rotationY += 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+        std::cout << "Left key pressed. rotationY: " << rotationY << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         rotationY -= 0.01f;
+        std::cout << "Right key pressed. rotationY: " << rotationY << std::endl;
+    }
 
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         lightPosY += 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        std::cout << "W key pressed. lightPosY: " << lightPosY << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         lightPosY -= 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        std::cout << "S key pressed. lightPosY: " << lightPosY << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         lightPosX -= 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        std::cout << "A key pressed. lightPosX: " << lightPosX << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         lightPosX += 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        std::cout << "D key pressed. lightPosX: " << lightPosX << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
         lightPosZ -= 0.01f;
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        std::cout << "Q key pressed. lightPosZ: " << lightPosZ << std::endl;
+    }
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
         lightPosZ += 0.01f;
+        std::cout << "E key pressed. lightPosZ: " << lightPosZ << std::endl;
+    }
 }
