@@ -9,11 +9,16 @@ out vec3 Normal;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform bool useDefaultNormals;
 
 void main()
 {
     FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;
+    if (useDefaultNormals) {
+        Normal = vec3(0.0, 0.0, 1.0); // standaard normaalvector
+    } else {
+        Normal = mat3(transpose(inverse(model))) * aNormal;
+    }
 
     gl_Position = projection * view * vec4(FragPos, 1.0);
 }
