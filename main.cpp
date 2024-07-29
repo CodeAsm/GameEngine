@@ -159,8 +159,12 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // Position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // Normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -168,46 +172,63 @@ int main()
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+
+    // Material properties
+    glUniform3f(glGetUniformLocation(shaderProgram, "material.ambient"), 0.2f, 0.2f, 0.2f);
+    glUniform3f(glGetUniformLocation(shaderProgram, "material.diffuse"), 0.5f, 0.5f, 0.5f);
+    glUniform3f(glGetUniformLocation(shaderProgram, "material.specular"), 1.0f, 1.0f, 1.0f);
+    glUniform1f(glGetUniformLocation(shaderProgram, "material.shininess"), 32.0f);
+
+    // Light properties
+    glUniform3f(glGetUniformLocation(shaderProgram, "light.position"), lightPosX, lightPosY, lightPosZ);
+    glUniform3f(glGetUniformLocation(shaderProgram, "light.ambient"), 0.2f, 0.2f, 0.2f);
+    glUniform3f(glGetUniformLocation(shaderProgram, "light.diffuse"), 0.5f, 0.5f, 0.5f);
+    glUniform3f(glGetUniformLocation(shaderProgram, "light.specular"), 1.0f, 1.0f, 1.0f);
+    glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), 0.0f, 0.0f, 3.0f);
+
     // Render loop
     while (!glfwWindowShouldClose(window)) {
-      // Invoer verwerken
-        processInput(window);
+    // Invoer verwerken
+    processInput(window);
 
-        // Render logica hier
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // Render logica hier
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Use shader program
-        glUseProgram(shaderProgram);
+    // Gebruik het shader programma
+    glUseProgram(shaderProgram);
 
-        // Model matrix met rotatie
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
-        model = glm::rotate(model, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
+    // Materiaal- en lichtinformatie bijwerken
+    glUniform3f(glGetUniformLocation(shaderProgram, "light.position"), lightPosX, lightPosY, lightPosZ);
 
-        // View matrix
-        glm::mat4 view = glm::mat4(1.0f);
-        view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    // Model matrix met rotatie
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::rotate(model, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
 
-        // Projection matrix
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    // View matrix
+    glm::mat4 view = glm::mat4(1.0f);
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
-        // Get their uniform location
-        unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
-        unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
-        unsigned int projLoc = glGetUniformLocation(shaderProgram, "projection");
+    // Projection matrix
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-        // Pass them to the shaders
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+    // Uniform locaties verkrijgen
+    unsigned int modelLoc = glGetUniformLocation(shaderProgram, "model");
+    unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+    unsigned int projLoc = glGetUniformLocation(shaderProgram, "projection");
 
-        // Draw the object
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, vertices.size() / 3);
+    // Stuur matrices naar shaders
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-        // Buffers wisselen
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+    // Tekenen van het object
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices) / (6 * sizeof(float)));
+
+    // Buffers wisselen
+    glfwSwapBuffers(window);
+    glfwPollEvents();
     }
 
     // Opruimen
