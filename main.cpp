@@ -3,7 +3,63 @@
 #include <tiny_obj_loader.h>
 #include <iostream>
 #include <cstddef>
+#include <fstream>
+#include <sstream>
+#include <string>
 
+// Functie om shaderbroncode te lezen uit een bestand
+std::string readShaderSource(const std::string& filePath) {
+    std::ifstream shaderFile(filePath);
+    if (!shaderFile.is_open()) {
+        std::cerr << "Failed to open " << filePath << std::endl;
+        return "";
+    }
+
+    std::stringstream shaderStream;
+    shaderStream << shaderFile.rdbuf();
+    shaderFile.close();
+
+    return shaderStream.str();
+}
+unsigned int compileShader(unsigned int type, const std::string& source) {
+    unsigned int shader = glCreateShader(type);
+    const char* src = source.c_str();
+    glShaderSource(shader, 1, &src, nullptr);
+    glCompileShader(shader);
+
+    int success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "Error compiling shader: " << infoLog << std::endl;
+    }
+
+    return shader;
+}
+
+unsigned int createShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource) {
+    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
+    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
+
+    unsigned int shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    int success;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        char infoLog[512];
+        glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+        std::cerr << "Error linking program: " << infoLog << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
 // Schermgrootte
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -66,21 +122,60 @@ int main()
         return -1;
     }
 
-    // Hier komt de rest van je render logica
 
-    while (!glfwWindowShouldClose(window))
-    {
+    // Shaders laden
+    std::string vertexShaderSource = readShaderSource("vertex_shader.glsl");
+    std::string fragmentShaderSource = readShaderSource("fragment_shader.glsl");
+
+    // Shader programma creëren
+    unsigned int shaderProgram = createShaderProgram(vertexShaderSource, fragmentShaderSource);
+
+    // Vertex data en buffers
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
+    };
+
+    unsigned int VBO, VAO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+    // Hier komt de rest van je render logica
+    // Render loop
+    while (!glfwWindowShouldClose(window)) {
+
         // Invoer verwerken
         processInput(window);
 
         // Render logica hier
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         // Buffers wisselen
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // Cleanup
+    // Opruimen
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
+
     glfwTerminate();
     return 0;
 }
